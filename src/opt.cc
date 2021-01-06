@@ -78,8 +78,8 @@ namespace node_libtidy {
       TidyOption opt = Unwrap(info.Holder()); if (!opt) return;
       const char* res;
       switch (tidyOptGetCategory(opt)) {
-      case TidyMarkup:
-        res = "Markup";
+      case TidyMark:
+        res = "Mark";
         break;
       case TidyDiagnostics:
         res = "Diagnostics";
@@ -89,9 +89,6 @@ namespace node_libtidy {
         break;
       case TidyEncoding:
         res = "Encoding";
-        break;
-      case TidyMiscellaneous:
-        res = "Miscellaneous";
         break;
       default:
         Nan::ThrowError("Unknown option category");

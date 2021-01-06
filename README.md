@@ -1,40 +1,37 @@
-# libtidy
+# node-libtidy
 
-This package provides bindings to
-[libtidy](http://www.html-tidy.org/developer/)
-which can be used to parse and tidy up HTML 5.
-The library is built as a native node extension,
-compiled from sources shipped with the package.
-Precompiled libraries are available for many common platforms,
-and will get installed automatically if available.
-So you don't have to have the HTML Tidy package installed on your system.
+This package provides bindings to [libtidy](http://www.html-tidy.org/developer/) which can be used to parse and tidy up HTML 5. The library is built as a native node extension, compiled from sources shipped with the package.
+
+Pre-compiled libraries are available for many common platforms, and will get installed automatically if available. This means you don't have to have the HTML Tidy package installed on your system.
+
+## Release Instructions
+
+1. Clean tree: `git clean -idx`.
+1. Rebuild library locally: `npm install`.
+1. Run tests: `npm test`.
+1. Examine commit history since last release to identify relevant changes.
+1. Create a signed and annotated git tag: `git tag -s vX.Y.Z`.
+   Include a short description of the relevant changes.
+1. Publish it to GitHub: `git push origin tag vX.Y.Z`.
+1. Wait for Travis and AppVeyor to build pre-compiled libraries for it.
+   These should get uploaded to a release draft automatically.
+1. Edit release draft on GitHub and publish it.
+   Change name of release from vX.Y.Z to X.Y.Z.
+   Include description of changes, possibly with improved Markdown formatting.
+1. Publish release on NPM: `npm publish`
 
 ## Alternatives
 
-* [tidy-html5](https://www.npmjs.com/package/tidy-html5)
-  has libtidy compiled to JavaScript using
-  [emscripten](http://emscripten.org/).
-  It is likely more portable, but at the cost of performance.
-  Only supports synchroneous operation.
-* [tidy](https://www.npmjs.com/package/tidy)
-  and [tidy2](https://www.npmjs.com/package/tidy2)
-  also provide bindings for libtidy,
-  but they expect the library and its header files
-  to be installed on the system.
-  Only supports synchroneous operation.
-* [htmltidy](https://www.npmjs.com/package/htmltidy)
-  and [htmltidy2](https://www.npmjs.com/package/htmltidy2)
-  use the command line tool to tidy up html,
-  so they incur some process creation overhead.
-  The binaries for the most common platforms are shipped with the package,
-  but other platforms are not supported.
-  This approach requires no build tools, though.
-  Only supports asynchroneous operation.
+* [tidy-html5](https://www.npmjs.com/package/tidy-html5) has libtidy compiled to JavaScript using
+  [emscripten](http://emscripten.org/). It is likely more portable, but at the cost of performance. Only supports synchronous operation.
+* [tidy](https://www.npmjs.com/package/tidy) and [tidy2](https://www.npmjs.com/package/tidy2)
+  also provide bindings for libtidy, but they expect the library and its header files
+  to be installed on the system. Only supports synchronous operation.
+* [htmltidy](https://www.npmjs.com/package/htmltidy) and [htmltidy2](https://www.npmjs.com/package/htmltidy2)
+  use the command line tool to tidy up html, so they incur some process creation overhead. The binaries for the most common platforms are shipped with the package, but other platforms are not supported. This approach requires no build tools, though. Only supports synchronous operation.
 
-The project will try to provide drop-in replacements for these libraries,
-so that people can easily compare implementations.
-At the moment, the `tidy` method shared with the `htmltidy` modules
-is the only such replacement which has been implemented.
+The project will try to provide drop-in replacements for these libraries, so that people can easily compare implementations.
+At the moment, the `tidy` method shared with the `htmltidy` modules is the only such replacement which has been implemented.
 
 ## Usage
 
@@ -87,7 +84,7 @@ each of them.
 The basic workflow consists of these four steps executed on such an object:
 
 | Step | C API | Synchroneous JavaScript | Asynchroneous JavaScript |
-| --- | --- | --- | --- |
+| --* | --* | --* | --* |
 | 1. | [`tidyParseBuffer(doc,&buf)`][tidyParseBuffer] | `doc.parseBufferSync(buf)` | `doc.parseBuffer(buf,cb)` |
 | 2. | [`tidyCleanAndRepair(doc)`][tidyCleanAndRepair] | `doc.cleanAndRepairSync()` | `doc.cleanAndRepair(cb)` |
 | 3. | [`tidyRunDiagnostics(doc)`][tidyRunDiagnostics] | `doc.runDiagnosticsSync()` | `doc.runDiagnostics(cb)` |
@@ -148,37 +145,37 @@ The following lists the full public interface of the package.
 Details on each item can be found in the
 [API documentation](https://github.com/gagern/node-libtidy/blob/master/API.md).
 
-- [**tidyBuffer(input, [opts], [cb])**][APItidyBuffer] – async function
-- [**TidyDoc()**][APITidyDoc] – constructor
-  - [**cleanAndRepair([cb])**][APIcleanAndRepair] – async method
-  - [**cleanAndRepairSync()**][APIcleanAndRepairSync] – method
-  - [**getOption(key)**][APIgetOption] – method
-  - [**getOptionList()**][APIgetOptionList] – method
-  - [**optGet(key)**][APIoptGet] – method
-  - [**optGetCurrPick(key)**][APIoptGetCurrPick] – method
-  - [**optGetDoc(key)**][APIoptGetDoc] – method
-  - [**optGetDocLinksList(key)**][APIoptGetDocLinksList] – method
-  - [**optSet(key, value)**][APIoptSet] – method
-  - [**options**][APIoptions] – getter and setter
-  - [**parseBuffer(buf, [cb])**][APIparseBuffer] – async method
-  - [**parseBufferSync(buf)**][APIparseBufferSync] – method
-  - [**runDiagnostics([cb])**][APIrunDiagnostics] – async method
-  - [**runDiagnosticsSync()**][APIrunDiagnosticsSync] – method
-  - [**saveBuffer([cb])**][APIsaveBuffer] – async method
-  - [**saveBufferSync()**][APIsaveBufferSync] – method
-  - [**tidyBuffer(buf, [cb])**][APItidyBuffer] – async method
-- [**TidyOption()**][APITidyOption] – constructor (not for public use)
-  - [**category**][APIcategory] – getter
-  - [**default**][APIdefault] – getter
-  - [**id**][APIid] – getter
-  - [**name**][APIname] – getter
-  - [**pickList**][APIpickList] – getter
-  - [**readOnly**][APIreadOnly] – getter
-  - [**toString()**][APItoString] – method
-  - [**type**][APItype] – getter
-- [**compat**][APIcompat] – namespace
-  - [**htmltidy**][APIhtmltidy] – namespace
-    - [**tidy(input, [opts], cb)**][APItidy] – async function
+* [**tidyBuffer(input, [opts], [cb])**][APItidyBuffer] – async function
+* [**TidyDoc()**][APITidyDoc] – constructor
+  * [**cleanAndRepair([cb])**][APIcleanAndRepair] – async method
+  * [**cleanAndRepairSync()**][APIcleanAndRepairSync] – method
+  * [**getOption(key)**][APIgetOption] – method
+  * [**getOptionList()**][APIgetOptionList] – method
+  * [**optGet(key)**][APIoptGet] – method
+  * [**optGetCurrPick(key)**][APIoptGetCurrPick] – method
+  * [**optGetDoc(key)**][APIoptGetDoc] – method
+  * [**optGetDocLinksList(key)**][APIoptGetDocLinksList] – method
+  * [**optSet(key, value)**][APIoptSet] – method
+  * [**options**][APIoptions] – getter and setter
+  * [**parseBuffer(buf, [cb])**][APIparseBuffer] – async method
+  * [**parseBufferSync(buf)**][APIparseBufferSync] – method
+  * [**runDiagnostics([cb])**][APIrunDiagnostics] – async method
+  * [**runDiagnosticsSync()**][APIrunDiagnosticsSync] – method
+  * [**saveBuffer([cb])**][APIsaveBuffer] – async method
+  * [**saveBufferSync()**][APIsaveBufferSync] – method
+  * [**tidyBuffer(buf, [cb])**][APItidyBuffer] – async method
+* [**TidyOption()**][APITidyOption] – constructor (not for public use)
+  * [**category**][APIcategory] – getter
+  * [**default**][APIdefault] – getter
+  * [**id**][APIid] – getter
+  * [**name**][APIname] – getter
+  * [**pickList**][APIpickList] – getter
+  * [**readOnly**][APIreadOnly] – getter
+  * [**toString()**][APItoString] – method
+  * [**type**][APItype] – getter
+* [**compat**][APIcompat] – namespace
+  * [**htmltidy**][APIhtmltidy] – namespace
+    * [**tidy(input, [opts], cb)**][APItidy] – async function
 
 [APItidyBuffer]: https://github.com/gagern/node-libtidy/blob/master/API.md#tidyBuffer
 [APITidyDoc]: https://github.com/gagern/node-libtidy/blob/master/API.md#TidyDoc
